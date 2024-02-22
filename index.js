@@ -23,7 +23,7 @@ const SongRoutes = require("./routes/song");
 app.use("/appmusic/user",UserRoutes); 
 app.use("/appmusic/artist",ArtistRoutes); 
 app.use("/appmusic/album",AlbumRoutes); 
-app.use("/appmusic/song",SongRoutes); 
+app.use("/appmusic/song",SongRoutes);    
 
 //RUTA DE PRUEBA
 app.get("/test", (req, res) => {
