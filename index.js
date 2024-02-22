@@ -14,9 +14,30 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+// DEFINICIÓN RUTAS PETICIONES MODELOS
+const UserRoutes = require("./routes/user"); 
+const ArtistRoutes = require("./routes/artist"); 
+const AlbumRoutes = require("./routes/album"); 
+const SongRoutes = require("./routes/song"); 
+
+app.use("/appmusic/user",UserRoutes); 
+app.use("/appmusic/artist",ArtistRoutes); 
+app.use("/appmusic/album",AlbumRoutes); 
+app.use("/appmusic/song",SongRoutes); 
+
+//RUTA DE PRUEBA
+app.get("/test", (req, res) => {
+    return res.status(200).send( ({
+        id:111,
+        name: "Satan", 
+        surname: "Hola",
+        message: "ESE CÓDIGO QUE NO DECAIGA"
+    }))
+})
+
 // SERVIDOR DE NODE ESCUCHANDO EN EL PUERTO
 app.listen(port,()=> {
     console.log("NODE SERVER PORT => ", port)
 })
-//EEJECUTAR CONEXIÓN A BD   
+//EJECUTAR CONEXIÓN A BD   
 connection();
