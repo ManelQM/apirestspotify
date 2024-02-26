@@ -12,4 +12,24 @@ const validate = (params) => {
                  validator.isEmail(params.email, {min:3, max: 30}); 
     
     let password = !validator.isEmpty(params.password) 
+
+    if(params.surname) {
+        let surname = !validator.isEmpty(params.surname) && 
+                       validator.isLength(params.surname, {min:3, max:30}) &&
+                       validator.isAlpha(params.surname, "es-ES");
+        if(!surname) {
+            throw new Error("VALIDATE ERROR"); 
+        }else{
+            console.log("VALIDATED SURNAME CORRECTLY");
+        }   
+    }; 
+
+    if(!name || !nick ||!email || !password) {
+        throw new Error("Validate Procol Error"); 
+    }else{
+        console.log("VALIDATED!!")
+    }
+
 }
+
+module.exports = validate; 

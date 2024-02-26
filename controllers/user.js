@@ -1,3 +1,6 @@
+const validate = require("../helpers/validate"); 
+const User = require("../models/user"); 
+
 // RUTA PRUEBA
 const prueba = async (req,res) => {
 
@@ -29,9 +32,20 @@ const register = async (req,res) => {
             });
         };
     //Validar los datos
-
+        validate(params); 
+      if(!validate) {
+        return res.status.json({
+            status: "error",
+            message: "Validate Register Error"
+        })
+      }  
     //Control usuarios duplicados
-
+      const duplicatedUsers = await User.find({
+        $or: [
+            {email: params.email.toLowerCase()},
+            {nick: params.nick.toLowerCase()}
+        ]
+      }).exec()
     //Cifrar la contraseña
 
     //Crear objeto del usuario
