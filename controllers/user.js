@@ -91,7 +91,14 @@ const login = async (req, res) => {
                 message: "Please complete the required fields",
             });
         }
-        const users = await User.findOne({email: params.email})
+        const users = await User.findOne({email: params.email});
+        if(!users) {
+            return res.status(404).json({
+                status: "error",
+                message: "Email or password invalid",
+            });
+        }
+        
     }catch{}
 }
 
