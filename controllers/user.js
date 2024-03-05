@@ -66,7 +66,7 @@ const register = async (req, res) => {
       });
     }
 
-    //Limpiar el objeto a devolver
+    //TODO: Limpiar el objeto a devolver 
 
     //Devolver el resultado
     return res.status(200).json({
@@ -124,10 +124,38 @@ const login = async (req, res) => {
         message: "INTERNAL SERVER ERROR",
       })
     }
+}; 
+
+const getProfile = async (req, res) => { 
+  try{
+    //OBTENER PARÁMETRO
+    const id = req.params.id;
+    //CONSULTA BD PARA OBTENER PERFIL USUARIO
+    const profile = await User.findById(id);
+    if(!profile || !id) {
+      return res.status(400).json({
+        status: "error",
+        message: "Who are you?, cant find user",
+      })
+    }
+    return res.status(200).json({
+      status: "success", 
+      message: "This is your profile",
+      user: profile,
+    })
+  }catch(error){
+    console.error(error);
+    return res.status(400).json({
+      status:"error",
+      message: "INTERNAL SERVER ERROR",
+    })
+
+  }
 }
 
 module.exports = {
   prueba,
   register,
   login,
+  getProfile,
 };
