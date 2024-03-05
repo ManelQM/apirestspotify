@@ -91,6 +91,7 @@ const login = async (req, res) => {
                 message: "Please complete the required fields",
             });
         }
+        //BUSCAR EN LA BD SI EL USUARIO EXISTE
         const users = await User.findOne({email: params.email});
         if(!users) {
             return res.status(404).json({
@@ -98,8 +99,16 @@ const login = async (req, res) => {
                 message: "Email or password invalid",
             });
         }
+        //CRIPTAR PASSWORD
+        const userPassword = bcrypt.compareSync(params.password, users.password) 
         
-    }catch{}
+    }catch(error){
+      console.error(error);
+      return res.status(400).json({
+        status: "error",
+        message: "INTERNAL SERVER ERROR",
+      })
+    }
 }
 
 module.exports = {
