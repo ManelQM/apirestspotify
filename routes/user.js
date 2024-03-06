@@ -6,6 +6,7 @@ const authorization = require("../middleware/authMiddleware");
 router.get("/demouser", UserController.prueba);
 router.post("/register", UserController.register);
 router.get("/login", UserController.login);
-router.get("/getProfile/:id", authorization.auth,UserController.getProfile); 
+router.get("/getprofile/:id", authorization.auth,UserController.getProfile);
+router.put("/updateprofile",authorization.auth,UserController.updateUserProfile); 
 
 module.exports = router;  

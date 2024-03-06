@@ -1,7 +1,7 @@
 const validate = require("../helpers/validate");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const jwt = require("../services/authService"); 
+const jwt = require("../services/authService");
 
 // RUTA PRUEBA
 const prueba = async (req, res) => {
@@ -66,7 +66,7 @@ const register = async (req, res) => {
       });
     }
 
-    //TODO: Limpiar el objeto a devolver 
+    //TODO: Limpiar el objeto a devolver
 
     //Devolver el resultado
     return res.status(200).json({
@@ -84,78 +84,85 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    try{
-        let params = req.body; 
-        if (!params.email || !params.password) {
-            return res.status(400).json({
-                status: "error",
-                message: "Please complete the required fields",
-            });
-        }
-        //BUSCAR EN LA BD SI EL USUARIO EXISTE
-        const users = await User.findOne({email: params.email});
-        if(!users) {
-            return res.status(404).json({
-                status: "error",
-                message: "Email or password invalid",
-            });
-        }
-        console.log("CONST USERS =>",users);
-        //CRIPTAR PASSWORD
-        const userPassword = bcrypt.compareSync(params.password, users.password);
-        if(!userPassword) {
-          return res.status(400).json({
-            status: "error",
-            message: "Bad password",
-          });
-        } 
-     //INSERTAR TOKEN
-     const token = jwt.createToken(users); 
-     return res.status(200).json({
+  try {
+    let params = req.body;
+    if (!params.email || !params.password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Please complete the required fields",
+      });
+    }
+    //BUSCAR EN LA BD SI EL USUARIO EXISTE
+    const users = await User.findOne({ email: params.email });
+    if (!users) {
+      return res.status(404).json({
+        status: "error",
+        message: "Email or password invalid",
+      });
+    }
+    console.log("CONST USERS =>", users);
+    //CRIPTAR PASSWORD
+    const userPassword = bcrypt.compareSync(params.password, users.password);
+    if (!userPassword) {
+      return res.status(400).json({
+        status: "error",
+        message: "Bad password",
+      });
+    }
+    //INSERTAR TOKEN
+    const token = jwt.createToken(users);
+    return res.status(200).json({
       status: "success",
       message: "You are logged, enjoy!",
       users,
       token,
-     })
-    }catch(error){
-      console.error(error);
-      return res.status(400).json({
-        status: "error",
-        message: "INTERNAL SERVER ERROR",
-      })
-    }
-}; 
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
 
-const getProfile = async (req, res) => { 
-  try{
+const getProfile = async (req, res) => {
+  try {
     //OBTENER PARÁMETRO
     const id = req.params.id;
     //CONSULTA BD PARA OBTENER PERFIL USUARIO
     const profile = await User.findById(id);
-    if(!profile || !id) {
+    if (!profile || !id) {
       return res.status(400).json({
         status: "error",
         message: "Who are you?, cant find user",
-      })
+      });
     }
     return res.status(200).json({
-      status: "success", 
+      status: "success",
       message: "This is your profile",
       user: profile,
-    })
-  }catch(error){
+    });
+  } catch (error) {
     console.error(error);
     return res.status(400).json({
-      status:"error",
+      status: "error",
       message: "INTERNAL SERVER ERROR",
-    })
+    });
+  }
+};
+
+const updateUserProfile = async (req, res) => {
+  try{
+
+  } catch (error){
 
   }
 }
-
 module.exports = {
   prueba,
   register,
   login,
   getProfile,
+  updateUserProfile,
 };
