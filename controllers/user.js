@@ -141,7 +141,7 @@ const getProfile = async (req, res) => {
         status: "error",
         message: "Who are you?, cant find user",
       });
-    }
+    } 
     return res.status(200).json({
       status: "success",
       message: "This is your profile",
@@ -155,6 +155,8 @@ const getProfile = async (req, res) => {
     });
   }
 };
+
+//UPDATE PROFILE CONTROLLER
 
 const updateUserProfile = async (req, res) => {
   try {
