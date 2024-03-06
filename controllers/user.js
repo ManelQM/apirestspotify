@@ -83,6 +83,8 @@ const register = async (req, res) => {
   }
 };
 
+// LOGIN CONTROLLER
+
 const login = async (req, res) => {
   try {
     let params = req.body;
@@ -126,6 +128,8 @@ const login = async (req, res) => {
   }
 };
 
+//GET PROFILE CONTROLLER
+
 const getProfile = async (req, res) => {
   try {
     //OBTENER PARÁMETRO
@@ -153,12 +157,36 @@ const getProfile = async (req, res) => {
 };
 
 const updateUserProfile = async (req, res) => {
-  try{
-
-  } catch (error){
-
+  try {
+    //OBTENEMOS PARAMETRO POR BODY
+    let profile = req.body;
+    //CONSULTA BD SI EXISTE EL USUARIO SI EXISTE ACTUALIZA
+    const editedProfile = await User.findOneAndUpdate(
+      { email: req.authorization.email },
+      { name: profile.name, surname: profile.surname, nick: profile.nick },
+      { new: true } // Para obtener el documento actualizado
+    );
+    //SI NO EXISTE EL USUARIO DEVOLVEMOS ERROR
+    if (!editedProfile) {
+      return res.status(404).json({
+        status: "error",
+        message: "User Not Found",
+      });
+    }
+    //DEVOLVEMOS EL USUARIO ACTUALIZADO
+    return res.status(200).json({
+      status: "success",
+      message: "User has been updated",
+      user: editedProfile,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
   }
-}
+};
 module.exports = {
   prueba,
   register,
