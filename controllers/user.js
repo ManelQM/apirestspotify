@@ -2,6 +2,8 @@ const validate = require("../helpers/validate");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("../services/authService");
+const fs = require("fs"); 
+const path = require("path"); 
 
 // RUTA PRUEBA
 const prueba = async (req, res) => {
@@ -251,7 +253,21 @@ const uploadAvatar = async (req, res) => {
 
 const getUserAvatar = async (req, res) => {
   try{
-
+    //SACAR PARAMETRO URL
+    const fileAvatar = await req.params.file; 
+    //RUTA IMAGEN
+    const filePath = "./uploads/avatars/" + req.params.file;
+    //COMPROBAR SI EXISTE EL ARCHIVO
+    fs.stat(filePath, () => {
+      if(!fileAvatar) {
+        return res.status(404).json({
+          status:"error",
+          message: "Cant find image",
+        })
+      }
+      //DEVOLVER FILE
+      return res.sendFile(path.resolve(filePath));
+    }) 
   }catch(error){
     console.error(error)
     return res.status(400).json({
