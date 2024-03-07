@@ -141,7 +141,7 @@ const getProfile = async (req, res) => {
         status: "error",
         message: "Who are you?, cant find user",
       });
-    } 
+    }
     return res.status(200).json({
       status: "success",
       message: "This is your profile",
@@ -193,38 +193,61 @@ const updateUserProfile = async (req, res) => {
 //UPLOAD AVATAR
 
 const uploadAvatar = async (req, res) => {
-  try{
+  try {
     //RECOGER FICHERO DE IMAGEN Y COMPROBAR SI EXISTE
-    if(!req.file) {
+    if (!req.file) {
       return res.status(400).json({
         status: "error",
         message: "Please add an Image",
-      })
+      });
     }
     //CONSEGUIR NOMBRE DEL ARCHIVO
-    let image = req.file.orignalname;
+    let image = req.file.originalname;
     //SACAR EXTENSION DEL ARCHIVO
-    const imageSplit = image.split("."); 
+    const imageSplit = image.split(".");
     const extension = imageSplit[1];
-    //COMPROBAR EXTENSION 
-    if(
+    //COMPROBAR EXTENSION
+    if (
       extension !== "png" &&
       extension !== "jpg" &&
       extension !== "jpge" &&
       extension !== "gif"
     ) {
-    //SI NO ES CORRECTO BORRAR ARCHIVO
-    const filePath = req.file.path; 
-    const fileDeleted = fs.unlinkSync(filePath);
-    return res.status(400).json({
-      status: "error",
-      message: "Invalid Extension File",
-    })
+      //SI NO ES CORRECTO BORRAR ARCHIVO
+      const filePath = req.file.path;
+      const fileDeleted = fs.unlinkSync(filePath);
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid Extension File",
+      });
     }
-  }catch{
-
+    // SI ES CORRECTO GUARDAR EN BBDD
+    const storedUserAvatarImg = await User.findOneAndUpdate(
+      { _id: req.authorization.id },
+      { image: req.file.filename }, //FILENAME ES EL NOMBRE QUE MULTER ASIGNA POR DEFECTO
+      { new: true }
+    );
+    if (!storedUserAvatarImg) {
+      return res.status(400).json({
+        status: "error",
+        message: "Cant update the image, user not found",
+      });
+    }
+    //RESPUESTA
+    return res.status(200).json({
+      status: "success",
+      message: "Avatar uploaded with success!",
+      user: storedUserAvatarImg,
+      file: req.file,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(404).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
   }
-}
+};
 
 module.exports = {
   prueba,
