@@ -189,10 +189,48 @@ const updateUserProfile = async (req, res) => {
     });
   }
 };
+
+//UPLOAD AVATAR
+
+const uploadAvatar = async (req, res) => {
+  try{
+    //RECOGER FICHERO DE IMAGEN Y COMPROBAR SI EXISTE
+    if(!req.file) {
+      return res.status(400).json({
+        status: "error",
+        message: "Please add an Image",
+      })
+    }
+    //CONSEGUIR NOMBRE DEL ARCHIVO
+    let image = req.file.orignalname;
+    //SACAR EXTENSION DEL ARCHIVO
+    const imageSplit = image.split("."); 
+    const extension = imageSplit[1];
+    //COMPROBAR EXTENSION 
+    if(
+      extension !== "png" &&
+      extension !== "jpg" &&
+      extension !== "jpge" &&
+      extension !== "gif"
+    ) {
+    //SI NO ES CORRECTO BORRAR ARCHIVO
+    const filePath = req.file.path; 
+    const fileDeleted = fs.unlinkSync(filePath);
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid Extension File",
+    })
+    }
+  }catch{
+
+  }
+}
+
 module.exports = {
   prueba,
   register,
   login,
   getProfile,
   updateUserProfile,
+  uploadAvatar,
 };
