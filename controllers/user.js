@@ -249,6 +249,18 @@ const uploadAvatar = async (req, res) => {
   }
 };
 
+const getUserAvatar = async (req, res) => {
+  try{
+
+  }catch(error){
+    console.error(error)
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR"
+    })
+
+  }
+}
 module.exports = {
   prueba,
   register,
@@ -256,4 +268,5 @@ module.exports = {
   getProfile,
   updateUserProfile,
   uploadAvatar,
+  getUserAvatar,
 };
