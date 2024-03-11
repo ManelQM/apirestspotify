@@ -1,4 +1,5 @@
 const Artist = require("../models/artist");
+const mongoosePagination = require("mongoose-pagination");
 
 // RUTA PRUEBA
 const prueba = async (req, res) => {
@@ -70,8 +71,43 @@ const getArtist = async (req, res) => {
     }
 };
 
+const getAllArtist = async (req, res) => {
+    try{
+    //COMIENZO PAGINACIÓN
+        let page = 1; 
+        if(req.params.page) {
+            page = req.params.page; 
+        }
+        page = parseInt(page);
+        //MONGOOSE PAGINATION
+        let itemsPerPage = 5; 
+        const findArtist = await Artist.find().sort("_id").paginate(page,itemsPerPage);
+        if (!findArtist || !page) {
+            return res.status(400).json({
+                status: "error",
+                message: "Cant find Artist List :(",
+            })
+        }
+        return res.status(200).json({
+            status: "success",
+            message: "Artist List",
+            artist: findArtist,
+            page,
+            itemsPerPage,
+            pages: Math.ceil(Artist/itemsPerPage),
+        })
+    }catch(error){
+        console.error(error);
+        return res.status(400).json({
+            status: "error",
+            message: "INTERNAL SERVER ERROR",
+        });
+    }
+};
+
 module.exports = {
   prueba,
   saveArtist,
   getArtist,
+  getAllArtist,
 };
