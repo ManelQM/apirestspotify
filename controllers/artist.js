@@ -23,9 +23,8 @@ const saveArtist = async (req, res) => {
     let artistToSave = new Artist(params);
     artistToSave.user = req.authorization.id;
     //GUARDAMOS ARTISTA
-    console.log(artistToSave, "eeooooooo")
     const savedArtist = await artistToSave.save();
-    console.log(savedArtist, "que pasa aqui chalao")
+   
     if (!savedArtist) {
       return res.status(404).json({
         status: "error",
@@ -46,7 +45,33 @@ const saveArtist = async (req, res) => {
   }
 };
 
+const getArtist = async (req, res) => {
+    try{
+        const artistId = req.params.id; 
+        const getOneArtist = await Artist.findById(artistId); 
+        
+        if(!artistId || !getOneArtist) {
+            return res.status(400).json({
+                status: "error",
+                message: "Cant find the artis :(",
+            })
+        }
+        return res.status(200).json({
+            status: "succes",
+            message: "Here is your artist ",
+            artist: getOneArtist,
+        })
+    }catch (error){
+        console.error(error);
+        return res.status(400).json({
+            status: "error",
+            message: "INTERNAL SERVER ERROR",
+        });
+    }
+};
+
 module.exports = {
   prueba,
   saveArtist,
+  getArtist,
 };
