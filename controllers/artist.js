@@ -112,7 +112,7 @@ const updateArtist = async (req, res) => {
 
         const updateThisArtist = await Artist.findByIdAndUpdate(artistId,updateDataArtist , {new: true}); // NEW:TRUE ES PARA DEVOLVER EL OBJETO ACTUALIZADO
         if(!updateThisArtist) {
-            return res.status(500).json({
+            return res.status(404).json({
                 status: "error",
                 message: "Cant update the Artist"
             })
