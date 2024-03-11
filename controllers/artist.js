@@ -105,9 +105,36 @@ const getAllArtist = async (req, res) => {
     }
 };
 
+const updateArtist = async (req, res) => {
+    try{
+        let artistId = req.params.id; 
+        let updateDataArtist = req.body
+
+        const updateThisArtist = await Artist.findByIdAndUpdate(artistId,updateDataArtist , {new: true}); // NEW:TRUE ES PARA DEVOLVER EL OBJETO ACTUALIZADO
+        if(!updateThisArtist) {
+            return res.status(500).json({
+                status: "error",
+                message: "Cant update the Artist"
+            })
+        }
+        return res.status(200).json({
+            status: "success",
+            message: "Artist updated !!",
+            artist: updateThisArtist,
+        })
+    }catch(error){
+        console.error(error);
+        return res.status(400).json({
+            status: "error",
+            message: "INTERNAL SERVER ERROR",
+        })
+    }
+}
+
 module.exports = {
   prueba,
   saveArtist,
   getArtist,
   getAllArtist,
+  updateArtist,
 };
