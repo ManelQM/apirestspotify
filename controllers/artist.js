@@ -110,14 +110,16 @@ const getAllArtist = async (req, res) => {
 
 const updateArtist = async (req, res) => {
   try {
-    let artistId = req.params.id;
-    let updateDataArtist = req.body;
-
+    // RECOGEMOS ID ARTISTA POR PARAMS
+    let artistId = req.params.id; 
+    // DATOS A ACTUALIZAR
+    let updateDataArtist = req.body; 
+    //BUSCAMOS ARTISTA EN BD
     const updateThisArtist = await Artist.findByIdAndUpdate(
       artistId,
-      updateDataArtist,
-      { new: true }
+      updateDataArtist, { new: true }
     ); // NEW:TRUE ES PARA DEVOLVER EL OBJETO ACTUALIZADO
+    
     if (!updateThisArtist) {
       return res.status(404).json({
         status: "error",
@@ -171,6 +173,18 @@ const deleteArtist = async (req, res) => {
   }
 };
 
+const uploadAlbumCover = async (req, res) => { 
+  try{
+    
+  }catch(error){
+    console.error(error); 
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    })
+  }
+}
+
 module.exports = {
   prueba,
   saveArtist,
@@ -178,4 +192,5 @@ module.exports = {
   getAllArtist,
   updateArtist,
   deleteArtist,
+  uploadAlbumCover,
 };
