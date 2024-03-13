@@ -111,15 +111,16 @@ const getAllArtist = async (req, res) => {
 const updateArtist = async (req, res) => {
   try {
     // RECOGEMOS ID ARTISTA POR PARAMS
-    let artistId = req.params.id; 
+    let artistId = req.params.id;
     // DATOS A ACTUALIZAR
-    let updateDataArtist = req.body; 
+    let updateDataArtist = req.body;
     //BUSCAMOS ARTISTA EN BD
     const updateThisArtist = await Artist.findByIdAndUpdate(
       artistId,
-      updateDataArtist, { new: true }
+      updateDataArtist,
+      { new: true }
     ); // NEW:TRUE ES PARA DEVOLVER EL OBJETO ACTUALIZADO
-    
+
     if (!updateThisArtist) {
       return res.status(404).json({
         status: "error",
@@ -159,7 +160,7 @@ const deleteArtist = async (req, res) => {
         status: "error",
         message: "Unable to remove the Artist",
       });
-    } 
+    }
     return res.status(200).json({
       status: "success",
       message: "Artist removed",
@@ -173,17 +174,62 @@ const deleteArtist = async (req, res) => {
   }
 };
 
-const uploadAlbumCover = async (req, res) => { 
-  try{
-    
-  }catch(error){
-    console.error(error); 
+const uploadAlbumCover = async (req, res) => {
+  try {
+    const artistId = req.params.id;
+    if (!req.file) {
+      return res.status(404).json({
+        status: "error",
+        message: "Please add an Image",
+      });
+    }
+    //CONSEGUIR NOMBRE DEL ARCHIVO
+    let image = req.file.originalname;
+    //EXTENSIÓN ARCHIVO
+    const imageSplit = image.split(".");
+    const extension = imageSplit[1];
+    //COMPROBAR EXTENSIÓN
+    if (
+      extension !== "png" &&
+      extension !== "jpg" &&
+      extension !== "jpge" &&
+      extension !== "gif"
+    ) {
+      //EN CASO DE EXTENSIÓN ICORRECTA
+      const filePath = req.file.path;
+      const fileDeleted = fs.unlinkSync(filePath);
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid extension file",
+      });
+    }
+
+    //SI ES CORRECTO GUARDAR EN BBDD
+    const storedAlbumCover = await Artist.findOneAndUpdate(
+      { _id: artistId },
+      { image: req.file.filename },
+      { new: true }
+    );
+    if (!storedAlbumCover) {
+      return res.status(404).json({
+        status: "error",
+        message: "Cant update the image",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      message: "Album Cover uploaded with success!!",
+      artist: storedAlbumCover,
+      file: req.file,
+    });
+  } catch (error) {
+    console.error(error);
     return res.status(400).json({
       status: "error",
       message: "INTERNAL SERVER ERROR",
-    })
+    });
   }
-}
+};
 
 module.exports = {
   prueba,
