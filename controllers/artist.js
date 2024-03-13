@@ -1,5 +1,7 @@
 const Artist = require("../models/artist");
 const mongoosePagination = require("mongoose-pagination");
+const fs = require("fs");
+const path = require("path");
 
 // RUTA PRUEBA
 const prueba = async (req, res) => {
@@ -176,7 +178,7 @@ const deleteArtist = async (req, res) => {
 
 const uploadAlbumCover = async (req, res) => {
   try {
-    const artistId = req.params.id;
+    const artistId = req.params.id; // ID DEL ARTISTA AL QUE VAMOS AÑADIR LA IMG
     if (!req.file) {
       return res.status(404).json({
         status: "error",
@@ -195,7 +197,7 @@ const uploadAlbumCover = async (req, res) => {
       extension !== "jpge" &&
       extension !== "gif"
     ) {
-      //EN CASO DE EXTENSIÓN ICORRECTA
+      //EN CASO DE EXTENSIÓN INCORRECTA BORRAMOS LA IMAGEN
       const filePath = req.file.path;
       const fileDeleted = fs.unlinkSync(filePath);
       return res.status(400).json({
@@ -213,7 +215,7 @@ const uploadAlbumCover = async (req, res) => {
     if (!storedAlbumCover) {
       return res.status(404).json({
         status: "error",
-        message: "Cant update the image",
+        message: "Cant upload the image",
       });
     }
     return res.status(200).json({
