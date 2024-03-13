@@ -1,3 +1,5 @@
+const Album = require("../models/album");
+
 // RUTA PRUEBA
 const prueba = async (req,res) => {
 
@@ -14,6 +16,15 @@ const prueba = async (req,res) => {
     };
 };
 
+const createAlbum = async (req, res) => {
+    try{
+
+    }catch{
+
+    }
+}; 
+
 module.exports = {
-    prueba
+    prueba,
+    createAlbum,
 }
