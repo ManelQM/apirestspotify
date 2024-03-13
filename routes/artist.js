@@ -23,5 +23,6 @@ router.get("/getallartist/:page?", authorization.auth,ArtistController.getAllArt
 router.put("/updateartist/:id?", authorization.auth,ArtistController.updateArtist);  
 router.delete("/deleteartist/:id?", authorization.auth, ArtistController.deleteArtist); 
 router.post("/uploadalbumcover/:id?", authorization.auth,[uploads.single("file0")], ArtistController.uploadAlbumCover);
+router.get("/albumcover/:file?", authorization.auth,ArtistController.getAlbumCover); 
 
 module.exports = router;

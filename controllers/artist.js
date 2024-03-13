@@ -233,6 +233,31 @@ const uploadAlbumCover = async (req, res) => {
   }
 };
 
+const getAlbumCover = async (req, res) => {
+  try {
+    //SACAR PARÁMETRO URL
+    const fileCover = await req.params.file;
+    //RUTA IMAGEN
+    const filePath = "./uploads/albumcover/" + req.params.file;
+    //COMPROBAR SI EXISTE EL ARCHIVO
+    fs.stat(filePath, () => {
+      if (!fileCover) {
+        return res.status(404).json({
+          status: "error",
+          message: "Cant find the album cover",
+        });
+      }
+      //DEVOLVER FILE
+      return res.sendFile(path.resolve(filePath));
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
 module.exports = {
   prueba,
   saveArtist,
@@ -241,4 +266,5 @@ module.exports = {
   updateArtist,
   deleteArtist,
   uploadAlbumCover,
+  getAlbumCover,
 };
