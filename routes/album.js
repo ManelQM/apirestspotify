@@ -6,6 +6,6 @@ const AlbumController = require("../controllers/album");
 const authorization = require("../middleware/authMiddleware"); 
 
 router.get("/demouser",AlbumController.prueba);
-router.post("/addalbum", authorization.auth,AlbumController.createAlbum);
+router.post("/addalbum", authorization.auth, AlbumController.createAlbum);
 
 module.exports = router; 
