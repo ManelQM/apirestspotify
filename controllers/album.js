@@ -1,4 +1,3 @@
-const album = require("../models/album");
 const Album = require("../models/album");
 
 // RUTA PRUEBA
@@ -94,9 +93,9 @@ const getAllArtistAlbums = async (req, res) => {
         message: "Cant find the albums list of this artist",
       });
     }
-    const albumsWithArtistName = allArtistAlbums.map(album => ({
+    const albumsWithArtistName = allArtistAlbums.map((album) => ({
       ...album.toObject(),
-      artist: album.artist.name //TODO: AGREGAR EL NOMBRE DE ARTIST EN LOS ALBUMS
+      artist: album.artist.name, //TODO: AGREGAR EL NOMBRE DE ARTIST EN LOS ALBUMS
     }));
     return res.status(200).json({
       status: "success",
@@ -113,9 +112,41 @@ const getAllArtistAlbums = async (req, res) => {
   }
 };
 
+const updateAlbum = async (req, res) => {
+  try {
+    let albumId = req.params.id;
+
+    let updateDataAlbum = req.body;
+
+    const updateThisAlbum = await Album.findByIdAndUpdate(
+      albumId,
+      updateDataAlbum,
+      { new: true }
+    );
+    if (!updateThisAlbum) {
+      return res.status(404).json({
+        status: "error",
+        message: "Cant update the album",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      message: "Album updated!",
+      album: updateThisAlbum,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
+
 module.exports = {
   prueba,
   createAlbum,
   getOneAlbum,
   getAllArtistAlbums,
+  updateAlbum,
 };

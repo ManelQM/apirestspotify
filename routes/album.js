@@ -9,5 +9,5 @@ router.get("/demouser",AlbumController.prueba);
 router.post("/addalbum", authorization.auth, AlbumController.createAlbum);
 router.get("/getonealbum/:id?", authorization.auth , AlbumController.getOneAlbum); 
 router.get("/allartistalbums/:id?", authorization.auth, AlbumController.getAllArtistAlbums);
-
+router.put("/updatealbum/:id?", authorization.auth, AlbumController.updateAlbum);
 module.exports = router; 
