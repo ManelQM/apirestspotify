@@ -143,6 +143,8 @@ const updateAlbum = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   prueba,
   createAlbum,
