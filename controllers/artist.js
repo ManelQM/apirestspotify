@@ -176,7 +176,7 @@ const deleteArtist = async (req, res) => {
   }
 };
 
-const uploadAlbumCover = async (req, res) => {
+const uploadArtistImg = async (req, res) => {
   try {
     const artistId = req.params.id; // ID DEL ARTISTA AL QUE VAMOS AÑADIR LA IMG
     if (!req.file) {
@@ -207,12 +207,12 @@ const uploadAlbumCover = async (req, res) => {
     }
 
     //SI ES CORRECTO GUARDAR EN BBDD
-    const storedAlbumCover = await Artist.findOneAndUpdate(
+    const storedArtitstImg = await Artist.findOneAndUpdate(
       { _id: artistId },
       { image: req.file.filename },
       { new: true }
     );
-    if (!storedAlbumCover) {
+    if (!storedArtitstImg) {
       return res.status(404).json({
         status: "error",
         message: "Cant upload the image",
@@ -220,8 +220,8 @@ const uploadAlbumCover = async (req, res) => {
     }
     return res.status(200).json({
       status: "success",
-      message: "Album Cover uploaded with success!!",
-      artist: storedAlbumCover,
+      message: "Image artist uploaded with success!!",
+      artist: storedArtitstImg,
       file: req.file,
     });
   } catch (error) {
@@ -233,18 +233,18 @@ const uploadAlbumCover = async (req, res) => {
   }
 };
 
-const getAlbumCover = async (req, res) => {
+const getArtistImg = async (req, res) => {
   try {
     //SACAR PARÁMETRO URL
-    const fileCover = await req.params.file;
+    const fileImg = await req.params.file;
     //RUTA IMAGEN
-    const filePath = "./uploads/albumcover/" + req.params.file;
+    const filePath = "./uploads/artistImage/" + req.params.file;
     //COMPROBAR SI EXISTE EL ARCHIVO
     fs.stat(filePath, () => {
-      if (!fileCover) {
+      if (!fileImg) {
         return res.status(404).json({
           status: "error",
-          message: "Cant find the album cover",
+          message: "Cant find the artist image",
         });
       }
       //DEVOLVER FILE
@@ -265,6 +265,6 @@ module.exports = {
   getAllArtist,
   updateArtist,
   deleteArtist,
-  uploadAlbumCover,
-  getAlbumCover,
+  uploadArtistImg,
+  getArtistImg,
 };

@@ -7,7 +7,7 @@ const authorization = require("../middleware/authMiddleware");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./uploads/albumcover/")
+        cb(null, "./uploads/artistImage/")
     },
     filename: (req, file, cb) => {
         cb(null, "cover-" + Date.now() + "-" + file.originalname)
@@ -22,7 +22,7 @@ router.get("/getArtist/:id?", authorization.auth,ArtistController.getArtist);
 router.get("/getallartist/:page?", authorization.auth,ArtistController.getAllArtist);
 router.put("/updateartist/:id?", authorization.auth,ArtistController.updateArtist);  
 router.delete("/deleteartist/:id?", authorization.auth, ArtistController.deleteArtist); 
-router.post("/uploadalbumcover/:id?", authorization.auth,[uploads.single("file0")], ArtistController.uploadAlbumCover);
-router.get("/albumcover/:file?", authorization.auth,ArtistController.getAlbumCover); 
+router.post("/uploadartistimg/:id?", authorization.auth,[uploads.single("file0")], ArtistController.uploadArtistImg);
+router.get("/artistimg/:file?", authorization.auth,ArtistController.getArtistImg); 
 
 module.exports = router;

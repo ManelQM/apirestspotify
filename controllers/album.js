@@ -1,4 +1,7 @@
 const Album = require("../models/album");
+const mongoosePagination = require("mongoose-pagination");
+const fs = require("fs");
+const path = require("path");
 
 // RUTA PRUEBA
 const prueba = async (req, res) => {
@@ -143,7 +146,88 @@ const updateAlbum = async (req, res) => {
   }
 };
 
+const uploadAlbumImg = async (req, res) => {
+  try {
+    const albumId = req.params.id; // ID DEL ALBUM AL QUE VAMOS AÑADIR LA IMG
+    if (!req.file) {
+      return res.status(404).json({
+        status: "error",
+        message: "Please add an Image",
+      });
+    }
+    //CONSEGUIR NOMBRE DEL ARCHIVO
+    let image = req.file.originalname;
+    //EXTENSIÓN ARCHIVO
+    const imageSplit = image.split(".");
+    const extension = imageSplit[1];
+    //COMPROBAR EXTENSIÓN
+    if (
+      extension !== "png" &&
+      extension !== "jpg" &&
+      extension !== "jpge" &&
+      extension !== "gif"
+    ) {
+      //EN CASO DE EXTENSIÓN INCORRECTA BORRAMOS LA IMAGEN
+      const filePath = req.file.path;
+      const fileDeleted = fs.unlinkSync(filePath);
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid extension file",
+      });
+    }
 
+    //SI ES CORRECTO GUARDAR EN BBDD
+    const storedAlbumImg = await Album.findOneAndUpdate(
+      { _id: albumId },
+      { image: req.file.filename },
+      { new: true }
+    );
+    if (!storedAlbumImg) {
+      return res.status(404).json({
+        status: "error",
+        message: "Cant upload the image",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      message: "Image artist uploaded with success!!",
+      artist: storedAlbumImg,
+      file: req.file,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
+
+const getAlbumImg = async (req, res) => {
+  try {
+    //SACAR PARÁMETRO URL
+    const fileImg = await req.params.file;
+    //RUTA IMAGEN
+    const filePath = "./uploads/artistImage/" + req.params.file;
+    //COMPROBAR SI EXISTE EL ARCHIVO
+    fs.stat(filePath, () => {
+      if (!fileImg) {
+        return res.status(404).json({
+          status: "error",
+          message: "Cant find the artist image",
+        });
+      }
+      //DEVOLVER FILE
+      return res.sendFile(path.resolve(filePath));
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
 
 module.exports = {
   prueba,
@@ -151,4 +235,6 @@ module.exports = {
   getOneAlbum,
   getAllArtistAlbums,
   updateAlbum,
+  uploadAlbumImg,
+  getAlbumImg,
 };
