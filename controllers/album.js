@@ -208,13 +208,13 @@ const getAlbumImg = async (req, res) => {
     //SACAR PARÁMETRO URL
     const fileImg = await req.params.file;
     //RUTA IMAGEN
-    const filePath = "./uploads/artistImage/" + req.params.file;
+    const filePath = "./uploads/album/" + req.params.file;
     //COMPROBAR SI EXISTE EL ARCHIVO
     fs.stat(filePath, () => {
       if (!fileImg) {
         return res.status(404).json({
           status: "error",
-          message: "Cant find the artist image",
+          message: "Cant find the album image",
         });
       }
       //DEVOLVER FILE

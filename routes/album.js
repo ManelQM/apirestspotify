@@ -8,7 +8,7 @@ const album = require("../models/album");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./uploads/albumImage/")
+        cb(null, "./uploads/album/")
     },
     filename: (req, file, cb) => {
         cb(null, "albumimg-" + Date.now() + "-" + file.originalname)
