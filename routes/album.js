@@ -17,11 +17,12 @@ const storage = multer.diskStorage({
 
 const uploads = multer({storage:storage});
 
-router.get("/demouser",AlbumController.prueba);
+router.get("/demouser", AlbumController.prueba);
 router.post("/addalbum", authorization.auth, AlbumController.createAlbum);
 router.get("/getonealbum/:id?", authorization.auth , AlbumController.getOneAlbum); 
 router.get("/allartistalbums/:id?", authorization.auth, AlbumController.getAllArtistAlbums);
 router.put("/updatealbum/:id?", authorization.auth, AlbumController.updateAlbum);
 router.post("/uploadalbumimg/:id?", authorization.auth,[uploads.single("file0")], AlbumController.uploadAlbumImg);
 router.get("/albumimg/:file?", authorization.auth,AlbumController.getAlbumImg); 
+
 module.exports = router; 

@@ -8,5 +8,6 @@ const authorization = require("../middleware/authMiddleware");
 
 router.get("/demouser", SongController.prueba);
 router.post("/savesong", authorization.auth,SongController.saveSong);
+router.get("/getonesong/:id", authorization.auth,SongController.getSong); 
 
 module.exports = router; 
