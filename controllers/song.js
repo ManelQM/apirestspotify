@@ -105,9 +105,43 @@ const getAllSongsAlbum = async (req, res) => {
   }
 };
 
+const updateSong = async (req, res) => {
+  try {
+    let songId = req.params.id;
+
+    let updateDataSong = req.body;
+
+    const updateThisSong = await Song.findByIdAndUpdate(
+      songId,
+      updateDataSong,
+      { new: true }
+    );
+
+    if (!updateThisSong) {
+      return res.status(404).json({
+        status: "error",
+        message: "Cant update the Song",
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      message: "Song updated!!",
+      song: updateThisSong,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
+
 module.exports = {
   prueba,
   saveSong,
   getSong,
   getAllSongsAlbum,
+  updateSong,
 };
