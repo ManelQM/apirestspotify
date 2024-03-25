@@ -138,10 +138,48 @@ const updateSong = async (req, res) => {
   }
 };
 
+const deleteSong = async (req, res) => {
+  try {
+    let songId = req.params.id;
+
+    const song = await Song.findById(songId);
+
+    if (!song) {
+      return res.status(404).json({
+        status: "error",
+        message: "Cant find the song",
+      });
+    }
+    const deleteSong = await Song.findByIdAndDelete(song);
+
+    if (!deleteSong) {
+      return res.status(400).json({
+        status: "error",
+        message: "Unable to delete the song",
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      message: "Song deleted!",
+      songDeleted: song,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
+
+
+
 module.exports = {
   prueba,
   saveSong,
   getSong,
   getAllSongsAlbum,
   updateSong,
+  deleteSong,
 };
