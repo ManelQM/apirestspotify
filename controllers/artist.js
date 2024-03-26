@@ -1,4 +1,6 @@
 const Artist = require("../models/artist");
+const Album = require("../models/album");
+const Song = require("../models/song");
 const mongoosePagination = require("mongoose-pagination");
 const fs = require("fs");
 const path = require("path");
@@ -19,7 +21,7 @@ const prueba = async (req, res) => {
   }
 };
 
-const saveArtist = async (req, res) => {
+const createArtist = async (req, res) => {
   try {
     //RECOGER DATOS DEL BODY
     let params = req.body;
@@ -156,6 +158,17 @@ const deleteArtist = async (req, res) => {
     }
 
     const deleteThisArtist = await Artist.findByIdAndDelete(artistId);
+    const removeAlbum = await Album.find({artist: artistId});
+
+    // removeAlbum.forEach(async(album) => {
+    //   const removeSongs = await Song.deleteMany({album:album._id});
+     
+    // });
+
+    for (let album of removeAlbum) {
+      await Song.deleteMany({ album: album._id });
+      await album.deleteOne();
+    }
 
     if (!deleteThisArtist) {
       return res.status(400).json({
@@ -260,7 +273,7 @@ const getArtistImg = async (req, res) => {
 };
 module.exports = {
   prueba,
-  saveArtist,
+  createArtist,
   getArtist,
   getAllArtist,
   updateArtist,
