@@ -16,7 +16,6 @@ const storage = multer.diskStorage({
 
 const uploads = multer({storage:storage}); 
 
-router.get("/demouser", SongController.prueba);
 router.post("/savesong", authorization.auth,SongController.saveSong);
 router.get("/getonesong/:id", authorization.auth,SongController.getSong); 
 router.get("/allalbumsongs/:id", authorization.auth, SongController.getAllSongsAlbum);

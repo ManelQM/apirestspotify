@@ -5,21 +5,6 @@ const mongoosePagination = require("mongoose-pagination");
 const fs = require("fs");
 const path = require("path");
 
-// RUTA PRUEBA
-const prueba = async (req, res) => {
-  try {
-    return res.status(200).json({
-      status: "success",
-      message: "Ruta prueba artist",
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(400).json({
-      status: "error",
-      message: "INERNAL SERVER ERROR",
-    });
-  }
-};
 
 const createArtist = async (req, res) => {
   try {
@@ -158,12 +143,7 @@ const deleteArtist = async (req, res) => {
     }
 
     const deleteThisArtist = await Artist.findByIdAndDelete(artistId);
-    const removeAlbum = await Album.find({artist: artistId});
-
-    // removeAlbum.forEach(async(album) => {
-    //   const removeSongs = await Song.deleteMany({album:album._id});
-     
-    // });
+    const removeAlbum = await Album.find({ artist: artistId });
 
     for (let album of removeAlbum) {
       await Song.deleteMany({ album: album._id });
@@ -272,7 +252,6 @@ const getArtistImg = async (req, res) => {
   }
 };
 module.exports = {
-  prueba,
   createArtist,
   getArtist,
   getAllArtist,

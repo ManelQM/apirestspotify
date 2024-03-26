@@ -3,20 +3,6 @@ const mongoosePagination = require("mongoose-pagination");
 const fs = require("fs"); 
 const path = require("path"); 
 
-// RUTA PRUEBA
-const prueba = async (req, res) => {
-  try {
-    return res.status(200).json({
-      status: "success",
-      message: "Ruta prueba song",
-    });
-  } catch {
-    return res.status(400).json({
-      status: "error",
-      message: "INERNAL SERVER ERROR",
-    });
-  }
-};
 
 const saveSong = async (req, res) => {
   try {
@@ -255,7 +241,6 @@ const getTheSongForListen = async (req, res) => {
 
 
 module.exports = {
-  prueba,
   saveSong,
   getSong,
   getAllSongsAlbum,

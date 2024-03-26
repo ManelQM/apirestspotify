@@ -5,7 +5,6 @@ const AlbumController = require("../controllers/album");
 const authorization = require("../middleware/authMiddleware"); 
 
 
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "./uploads/album/")
@@ -13,11 +12,10 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, "albumimg-" + Date.now() + "-" + file.originalname)
     }
-})
+});
 
 const uploads = multer({storage:storage});
 
-router.get("/demouser", AlbumController.prueba);
 router.post("/addalbum", authorization.auth, AlbumController.createAlbum);
 router.get("/getonealbum/:id?", authorization.auth , AlbumController.getOneAlbum); 
 router.get("/allartistalbums/:id?", authorization.auth, AlbumController.getAllArtistAlbums);

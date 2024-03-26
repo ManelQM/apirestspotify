@@ -5,20 +5,6 @@ const jwt = require("../services/authService");
 const fs = require("fs"); 
 const path = require("path"); 
 
-// RUTA PRUEBA
-const prueba = async (req, res) => {
-  try {
-    return res.status(200).json({
-      status: "success",
-      message: "Ruta prueba user",
-    });
-  } catch {
-    return res.status(400).json({
-      status: "error",
-      message: "INERNAL SERVER ERROR",
-    });
-  }
-};
 
 //REGISTER CONTROLLER
 
@@ -278,7 +264,6 @@ const getUserAvatar = async (req, res) => {
   }
 }
 module.exports = {
-  prueba,
   register,
   login,
   getProfile,
