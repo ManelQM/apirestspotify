@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const AlbumController = require("../controllers/album");
 const authorization = require("../middleware/authMiddleware"); 
-const album = require("../models/album");
+
 
 
 const storage = multer.diskStorage({

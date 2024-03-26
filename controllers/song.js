@@ -1,5 +1,8 @@
 const Song = require("../models/song");
 const mongoosePagination = require("mongoose-pagination");
+const fs = require("fs"); 
+const path = require("path"); 
+
 // RUTA PRUEBA
 const prueba = async (req, res) => {
   try {
@@ -173,8 +176,63 @@ const deleteSong = async (req, res) => {
   }
 };
 
+const uploadSongToAlbum = async (req, res) => {
+  try {
+    const songId = req.params.id; // ID DEL ALBUM AL QUE VAMOS AÑADIR LA IMG
+    if (!req.file) {
+      return res.status(404).json({
+        status: "error",
+        message: "Please add a Song",
+      });
+    }
+    //CONSEGUIR NOMBRE DEL ARCHIVO
+    let song = req.file.originalname;
+    //EXTENSIÓN ARCHIVO
+    const songSplit = song.split(".");
+    const extension = songSplit[1];
+    //COMPROBAR EXTENSIÓN
+    if (extension !== "mp3" && extension !== "ogg") {
+      //EN CASO DE EXTENSIÓN INCORRECTA BORRAMOS LA IMAGEN
+      const filePath = req.file.path;
+      const fileDeleted = fs.unlinkSync(filePath);
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid extension file",
+      });
+    }
 
+    //SI ES CORRECTO GUARDAR EN BBDD
+    const storedSong = await Song.findOneAndUpdate(
+      { _id: songId },
+      { file: req.file.filename },
+      { new: true }
+    );
+    console.log("REQ.FILE =>",req.file)
+    if (!storedSong) {
+      return res.status(404).json({
+        status: "error",
+        message: "Cant upload the song",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      message: "Song audio archive uploaded with success!!",
+      artist: storedSong,
+      file: req.file,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
 
+const getTheSongForListen = async (req, res) => {
+  try {
+  } catch {}
+};
 module.exports = {
   prueba,
   saveSong,
@@ -182,4 +240,6 @@ module.exports = {
   getAllSongsAlbum,
   updateSong,
   deleteSong,
+  uploadSongToAlbum,
+  getTheSongForListen,
 };
