@@ -231,7 +231,26 @@ const uploadSongToAlbum = async (req, res) => {
 
 const getTheSongForListen = async (req, res) => {
   try {
-  } catch {}
+    const fileMp3 = await req.params.file; 
+    const filePath = "./uploads/songs/" + req.params.file;
+
+    fs.stat(filePath, () => {
+      if(!fileMp3) {
+        return res.status(404).json({
+          status: "error",
+          message: "Cant find the audio file",
+        }); 
+      }
+      return res.sendFile(path.resolve(filePath));
+    });
+ 
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    })
+  }
 };
 module.exports = {
   prueba,
