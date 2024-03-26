@@ -22,5 +22,5 @@ router.get("/allartistalbums/:id?", authorization.auth, AlbumController.getAllAr
 router.put("/updatealbum/:id?", authorization.auth, AlbumController.updateAlbum);
 router.post("/uploadalbumimg/:id?", authorization.auth,[uploads.single("file0")], AlbumController.uploadAlbumImg);
 router.get("/albumimg/:file?", authorization.auth,AlbumController.getAlbumImg); 
-
+router.delete("/deletealbum/:id", authorization.auth, AlbumController.deleteAlbum);
 module.exports = router; 

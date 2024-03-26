@@ -1,8 +1,8 @@
 const Album = require("../models/album");
+const Songs = require("../models/song");
 const mongoosePagination = require("mongoose-pagination");
 const fs = require("fs");
 const path = require("path");
-
 
 const createAlbum = async (req, res) => {
   try {
@@ -63,7 +63,7 @@ const getOneAlbum = async (req, res) => {
 
 const getAllArtistAlbums = async (req, res) => {
   try {
-    const artistId = req.params.id;
+    const albumId = req.params.id;
 
     let page = 1;
 
@@ -71,7 +71,7 @@ const getAllArtistAlbums = async (req, res) => {
 
     const itemsPerPage = 10;
 
-    const allArtistAlbums = await Album.find({ artist: artistId })
+    const allArtistAlbums = await Album.find({ album: albumId })
       .sort({ created_at: -1 })
       .skip((page - 1) * itemsPerPage)
       .limit(itemsPerPage);
@@ -79,12 +79,12 @@ const getAllArtistAlbums = async (req, res) => {
     if (!allArtistAlbums) {
       return res.status(404).json({
         status: "error",
-        message: "Cant find the albums list of this artist",
+        message: "Cant find the albums list of this album",
       });
     }
     const albumsWithArtistName = allArtistAlbums.map((album) => ({
       ...album.toObject(),
-      artist: album.artist.name, //TODO: AGREGAR EL NOMBRE DE ARTIST EN LOS ALBUMS
+      album: album.album.name, //TODO: AGREGAR EL NOMBRE DE ARTIST EN LOS ALBUMS
     }));
     return res.status(200).json({
       status: "success",
@@ -176,8 +176,8 @@ const uploadAlbumImg = async (req, res) => {
     }
     return res.status(200).json({
       status: "success",
-      message: "Image artist uploaded with success!!",
-      artist: storedAlbumImg,
+      message: "Image album uploaded with success!!",
+      album: storedAlbumImg,
       file: req.file,
     });
   } catch (error) {
@@ -215,6 +215,47 @@ const getAlbumImg = async (req, res) => {
   }
 };
 
+const deleteAlbum = async (req, res) => {
+  try {
+    let albumId = req.params.id;
+    const album = await Album.findById(albumId);
+
+    if (!album) {
+      return res.status(400).json({
+        status: "error",
+        message: "Cant find the album",
+      });
+    }
+
+    const deleteThisAlbum = await Album.findByIdAndDelete(albumId);
+    const deleteSongs = await Songs.deleteMany({ album: album._id });
+
+    if (!deleteThisAlbum) {
+      return res.status(400).json({
+        status: "error",
+        message: "Unable to remove the Artist",
+      });
+    }
+    if (!deleteSongs) {
+      return res.status(400).json({
+        status: "error",
+        message: "Unable to remove the songs of the album",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      message: "Artist removed",
+      deleteThisAlbum,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({
+      status: "error",
+      message: "INTERNAL SERVER ERROR",
+    });
+  }
+};
+
 module.exports = {
   createAlbum,
   getOneAlbum,
@@ -222,4 +263,5 @@ module.exports = {
   updateAlbum,
   uploadAlbumImg,
   getAlbumImg,
+  deleteAlbum,
 };
