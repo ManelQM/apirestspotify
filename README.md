@@ -83,6 +83,49 @@ La arquitectura de funciones asíncronas en esta API aprovecha las capacidades d
 
 La base de datos en MongoDB está diseñada para ofrecer una estructura flexible y escalable, adaptada a las necesidades del negocio. Aunque no sigue un modelo relacional, su organización permite un control eficiente de las consultas y peticiones realizadas por los usuarios. La estructura se adapta a la lógica de negocio, proporcionando un registro completo de los datos necesarios para gestionar la plataforma, incluyendo información sobre usuarios registrados, publicaciones, relaciones de seguimiento, y otros elementos relevantes para el funcionamiento de la aplicación.
 
+![DB](./img/dbdiagram.png)
+
+# Lista de funcionalidades
+
+## Lista de Funcionalidades del Usuario
+
+- **POST /register**: Registrar un usuario.
+- **GET /login**: Iniciar sesión.
+- **GET /getprofile/:id**: Obtener perfil de usuario por ID (requiere autorización).
+- **PUT /updateprofile**: Actualizar perfil de usuario (requiere autorización).
+- **POST /uploadavatar**: Subir avatar de usuario (requiere autorización y carga de archivo).
+- **GET /getavatar/:file**: Obtener avatar de usuario por nombre de archivo (requiere autorización).
+
+## Lista de Funcionalidades del Artista
+
+- **POST /createartist**: Crear un artista (requiere autorización).
+- **GET /getartist/:id?**: Obtener un artista por ID (requiere autorización).
+- **GET /getallartist/:page?**: Obtener todos los artistas (opcional: paginación, requiere autorización).
+- **PUT /updateartist/:id?**: Actualizar un artista por ID (requiere autorización).
+- **DELETE /deleteartist/:id?**: Eliminar un artista por ID (requiere autorización).
+- **POST /uploadartistimg/:id?**: Subir imagen de un artista por ID (requiere autorización y carga de archivo).
+- **GET /artistimg/:file?**: Obtener imagen de un artista por nombre de archivo (requiere autorización).
+
+## Lista de Funcionalidades del Álbum
+
+- **POST /addalbum**: Agregar un álbum (requiere autorización).
+- **GET /getonealbum/:id?**: Obtener un álbum por ID (requiere autorización).
+- **GET /allartistalbums/:id?**: Obtener todos los álbumes de un artista por ID (requiere autorización).
+- **PUT /updatealbum/:id?**: Actualizar un álbum por ID (requiere autorización).
+- **POST /uploadalbumimg/:id?**: Subir imagen de un álbum por ID (requiere autorización y carga de archivo).
+- **GET /albumimg/:file?**: Obtener imagen de un álbum por nombre de archivo (requiere autorización).
+- **DELETE /deletealbum/:id**: Eliminar un álbum por ID (requiere autorización).
+
+## Lista de Funcionalidades de Canciones
+
+- **POST /savesong**: Guardar una canción (requiere autorización).
+- **GET /getonesong/:id**: Obtener una canción por ID (requiere autorización).
+- **GET /allalbumsongs/:id**: Obtener todas las canciones de un álbum por ID (requiere autorización).
+- **PUT /updatesong/:id**: Actualizar una canción por ID (requiere autorización).
+- **DELETE /deletesong/:id**: Eliminar una canción por ID (requiere autorización).
+- **POST /uploadsong/:id**: Subir una canción a un álbum por ID (requiere autorización y carga de archivo).
+- **GET /audiosong/:file**: Obtener el archivo de audio de una canción por nombre de archivo (requiere autorización).
+
 
 # English 
 
@@ -168,3 +211,46 @@ The asynchronous function architecture in this API leverages the capabilities of
 ## Database Architecture
 
 The MongoDB database is designed to offer a flexible and scalable structure tailored to the business needs. Although it does not follow a relational model, its organization allows efficient control of queries and requests made by users. The structure adapts to the business logic, providing a complete record of the data necessary to manage the platform, including information about registered users, publications, follow relationships, and other elements relevant to the operation of the application.
+
+![DB](./img/dbdiagram.png)
+
+# Feature List
+
+## User Functionality List
+
+- **POST /register**: Register a user.
+- **GET /login**: Log in.
+- **GET /getprofile/:id**: Get user profile by ID (requires authorization).
+- **PUT /updateprofile**: Update user profile (requires authorization).
+- **POST /uploadavatar**: Upload user avatar (requires authorization and file upload).
+- **GET /getavatar/:file**: Get user avatar by filename (requires authorization).
+
+## Artist Functionality List
+
+- **POST /createartist**: Create an artist (requires authorization).
+- **GET /getartist/:id?**: Get an artist by ID (requires authorization).
+- **GET /getallartist/:page?**: Get all artists (optional: pagination, requires authorization).
+- **PUT /updateartist/:id?**: Update an artist by ID (requires authorization).
+- **DELETE /deleteartist/:id?**: Delete an artist by ID (requires authorization).
+- **POST /uploadartistimg/:id?**: Upload an artist image by ID (requires authorization and file upload).
+- **GET /artistimg/:file?**: Get an artist image by filename (requires authorization).
+
+## Album Functionality List
+
+- **POST /addalbum**: Add an album (requires authorization).
+- **GET /getonealbum/:id?**: Get an album by ID (requires authorization).
+- **GET /allartistalbums/:id?**: Get all albums of an artist by ID (requires authorization).
+- **PUT /updatealbum/:id?**: Update an album by ID (requires authorization).
+- **POST /uploadalbumimg/:id?**: Upload an album image by ID (requires authorization and file upload).
+- **GET /albumimg/:file?**: Get an album image by filename (requires authorization).
+- **DELETE /deletealbum/:id**: Delete an album by ID (requires authorization).
+
+## Song Functionality List
+
+- **POST /savesong**: Save a song (requires authorization).
+- **GET /getonesong/:id**: Get a song by ID (requires authorization).
+- **GET /allalbumsongs/:id**: Get all songs of an album by ID (requires authorization).
+- **PUT /updatesong/:id**: Update a song by ID (requires authorization).
+- **DELETE /deletesong/:id**: Delete a song by ID (requires authorization).
+- **POST /uploadsong/:id**: Upload a song to an album by ID (requires authorization and file upload).
+- **GET /audiosong/:file**: Get the audio file of a song by filename (requires authorization).
